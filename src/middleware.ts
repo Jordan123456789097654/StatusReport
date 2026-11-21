@@ -9,7 +9,19 @@ import { NextResponse, type NextRequest } from "next/server";
 
 const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 const APP_HOSTS = new Set(
-  [new URL(appUrl).hostname, "localhost", "127.0.0.1", "[::1]", ...(process.env.APP_HOSTS || "").split(",")]
+  [
+    new URL(appUrl).hostname,
+    "localhost",
+    "127.0.0.1",
+    "[::1]",
+    // The production address and Vercel's own deployment URLs always count as the app, never as a customer domain.
+    "statusreport.roleflow.site",
+    process.env.VERCEL_URL,
+    process.env.VERCEL_BRANCH_URL,
+    process.env.VERCEL_PROJECT_PRODUCTION_URL,
+    ...(process.env.APP_HOSTS || "").split(","),
+  ]
+    .filter((h): h is string => Boolean(h))
     .map((h) => h.trim().toLowerCase().replace(/:\d+$/, ""))
     .filter(Boolean),
 );

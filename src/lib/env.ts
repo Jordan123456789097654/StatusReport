@@ -1,7 +1,7 @@
 // Central, typed access to environment configuration. Safe to import from the worker.
 const bool = (v: string | undefined, d: boolean) => (v === undefined || v === "" ? d : v === "true" || v === "1");
 
-const appUrl = (process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000").replace(/\/+$/, "");
+const appUrl = (process.env.NEXT_PUBLIC_APP_URL || (process.env.VERCEL ? "https://statusreport.roleflow.site" : "http://localhost:3000")).replace(/\/+$/, "");
 
 export const env = {
   appUrl,
