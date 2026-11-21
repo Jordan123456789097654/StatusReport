@@ -15,7 +15,8 @@
     "setup": "npm run db:push && npm run db:seed",
     "typecheck": "tsc --noEmit",
     "postinstall": "node scripts/prepare-db.mjs && prisma generate",
-    "serve": "node scripts/serve.mjs"
+    "serve": "node scripts/serve.mjs",
+    "db:seed-status": "node --env-file-if-exists=.env --import tsx scripts/seed-status.ts"
   },
   "dependencies": {
     "@prisma/client": "6.19.3",
