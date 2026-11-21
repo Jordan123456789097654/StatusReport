@@ -1,0 +1,32 @@
+# Single-host deployment: web app + background worker sharing one SQLite database volume.
+# For multi-tenant SaaS, point DATABASE_URL at PostgreSQL (see README) and add more worker regions.
+#
+#   cp .env.example .env   # then set AUTH_SECRET
+#   docker compose up -d
+services:
+  web:
+    build: .
+    env_file: .env
+    environment:
+      DATABASE_URL: ${DATABASE_URL:-file:../data/statusreport.db?connection_limit=1&socket_timeout=30}
+    ports:
+      - "3000:3000"
+    volumes:
+      - data:/app/data
+    restart: unless-stopped
+
+  worker:
+    build: .
+    env_file: .env
+    environment:
+      DATABASE_URL: ${DATABASE_URL:-file:../data/statusreport.db?connection_limit=1&socket_timeout=30}
+      WORKER_REGION: ${WORKER_REGION:-local}
+    command: ["sh", "-c", "npx tsx --env-file-if-exists=.env worker/index.ts"]
+    volumes:
+      - data:/app/data
+    depends_on:
+      - web
+    restart: unless-stopped
+
+volumes:
+  data:
