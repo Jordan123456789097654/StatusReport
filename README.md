@@ -47,6 +47,28 @@ Monitoring only works while the machine is on and online, so:
   simultaneous failures after a connectivity drop with suspicion.
 - Keep `BLOCK_PRIVATE_TARGETS=true` so other users can't make the worker probe devices on your home network.
 
+## Hosting on Vercel + Neon (checker on your laptop)
+
+Vercel can't run the check worker (it needs a long-running process), so split the work:
+
+- **Vercel** serves the website, dashboard, status pages and API. **Neon** stores the data.
+- **Your laptop** runs only the worker, pointed at the same Neon database.
+
+1. Create a Neon project. Copy the *pooled* and *direct* connection strings.
+2. Push this repo to GitHub, then import it in Vercel.
+3. In Vercel → Settings → Environment Variables set: `DATABASE_URL` (pooled), `DIRECT_URL` (direct),
+   `AUTH_SECRET`, `NEXT_PUBLIC_APP_URL=https://statusreport.roleflow.site`, `TRUST_PROXY=true`,
+   `DB_PUSH_ON_BUILD=true` (creates the tables on the first deploy).
+4. Add `statusreport.roleflow.site` under Vercel → Settings → Domains and follow its DNS instructions.
+5. For customer custom domains also set `VERCEL_API_TOKEN`, `VERCEL_PROJECT_ID` (and `VERCEL_TEAM_ID` for team
+   accounts). Saving a domain then registers it with Vercel for SSL. Point `statuspage.statusreport.roleflow.site`
+   at `cname.vercel-dns.com`.
+6. On the laptop, use a `.env` with the **same** `DATABASE_URL`, `DIRECT_URL` and `AUTH_SECRET`, then run
+   `npm run worker` (not `serve`).
+
+The dashboard warns when no worker has checked in for two minutes. While the laptop is off, status pages stay
+online but show the last known state, and nothing is checked or alerted.
+
 ## Architecture
 
 | Piece | Where | Notes |
@@ -124,7 +146,7 @@ exercised end to end yet. See **Known gaps** below.
 | 38 | Deployment markers | Implemented |
 | 39 | `status.json` | Implemented (Atlassian-style shape, not a full clone) |
 | 40 | RBAC with four roles | Implemented |
-| 41 | Dockerfile and Compose | Implemented (alternative to `npm run serve`). No Vercel / Cloudflare adapters: the worker needs a long-running process |
+| 41 | Dockerfile, Compose, Vercel + Neon | Implemented. The worker still needs a long-running machine |
 | 42 | SQLite / PostgreSQL switching | Implemented |
 | 43 | Single-tenant vs SaaS mode | Implemented (`SAAS_MODE`) |
 | 44 | Retention and rollups | Implemented (raw results pruned, daily stats kept) |
@@ -144,7 +166,7 @@ exercised end to end yet. See **Known gaps** below.
 - **TLS automation:** the `tls-ask` endpoint is included, but no Caddy config is shipped.
 - **Email** (subscriber confirmation, email alerts) needs `SMTP_URL` or `RESEND_API_KEY`. Without them, emails are written to the server log only.
 - **No password reset** yet. Accounts can only be recovered by an admin or by database access.
-- **Not serverless.** Hosting on Vercel isn't supported: the worker needs a long-running process, so run `npm run serve` on a machine that stays on.
+- **Checks never run on Vercel.** Only the website does; the worker must run on a machine that stays on.
 - **A laptop is a single point of failure.** If it sleeps or loses internet, nothing is checked and nothing alerts you. The dashboard banner only helps once you're back online.
 - **Translations** beyond English are partial.
 

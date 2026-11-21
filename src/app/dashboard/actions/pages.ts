@@ -7,6 +7,7 @@ import { requireWorkspace, uniqueSlug } from "@/lib/auth";
 import { hashPassword } from "@/lib/crypto";
 import { db } from "@/lib/db";
 import { normalizeDomain, validateDomain, verifyPageDomain } from "@/lib/domains";
+import { addProjectDomain, removeProjectDomain } from "@/lib/vercel";
 import { bool, flash, optStr, str } from "@/lib/forms";
 import type { Block } from "@/lib/blocks";
 import type { BarConfig } from "@/lib/blocks";
@@ -185,6 +186,7 @@ export async function saveCustomDomain(domainInput: string, pageId: string): Pro
   if (!page) return { ok: false, error: "Status page not found" };
   const domain = normalizeDomain(domainInput);
   if (!domain) {
+    if (page.customDomain) await removeProjectDomain(page.customDomain);
     await db.statusPage.update({ where: { id: pageId }, data: { customDomain: null, domainStatus: "none", domainError: null, domainVerifiedAt: null } });
     await audit({ workspaceId: ctx.workspace.id, userId: ctx.user.id, actor: ctx.user.email, action: "domain.remove", target: pageId, meta: { previous: page.customDomain } });
     revalidatePath(`/dashboard/status-pages/${pageId}`);
@@ -195,6 +197,9 @@ export async function saveCustomDomain(domainInput: string, pageId: string): Pro
   const taken = await db.statusPage.findFirst({ where: { customDomain: domain, id: { not: pageId } } });
   if (taken) return { ok: false, error: "That domain is already connected to another status page" };
   if (domain !== page.customDomain) {
+    const added = await addProjectDomain(domain);
+    if (!added.ok) return { ok: false, error: `Vercel could not add the domain: ${added.error}` };
+    if (page.customDomain) await removeProjectDomain(page.customDomain);
     await db.statusPage.update({ where: { id: pageId }, data: { customDomain: domain, domainStatus: "pending", domainVerifiedAt: null, domainError: null } });
     await audit({ workspaceId: ctx.workspace.id, userId: ctx.user.id, actor: ctx.user.email, action: "domain.change", target: pageId, meta: { domain, previous: page.customDomain } });
   }
@@ -217,6 +222,7 @@ export async function deleteStatusPage(fd: FormData) {
   const ctx = await requireWorkspace("admin");
   const id = str(fd, "id");
   const p = await ownPage(id, ctx.workspace.id);
+  if (p.customDomain) await removeProjectDomain(p.customDomain);
   await db.statusPage.delete({ where: { id } });
   await audit({ workspaceId: ctx.workspace.id, userId: ctx.user.id, actor: ctx.user.email, action: "statuspage.delete", target: id, meta: { slug: p.slug } });
   redirect("/dashboard/status-pages");
