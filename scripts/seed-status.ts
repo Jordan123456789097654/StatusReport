@@ -34,7 +34,7 @@ async function main() {
   const page =
     (await db.statusPage.findUnique({ where: { slug } })) ??
     (await db.statusPage.create({
-      data: { workspaceId, slug, name: "StatusReport", description: "Live status of the StatusReport platform." },
+      data: { workspaceId, slug, name: "StatusReport", description: "Live status of the StatusReport platform.", theme: "clean-light" },
     }));
   if (page.workspaceId !== workspaceId) throw new Error(`Slug "${slug}" is already used by another workspace.`);
 

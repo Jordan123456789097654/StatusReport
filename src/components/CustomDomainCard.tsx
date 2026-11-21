@@ -86,7 +86,7 @@ export function CustomDomainCard({
 
           <div className="mt-5 rounded-lg border border-line bg-bg">
             <p className="px-4 py-3 text-sm text-muted">
-              Please point <code className="rounded bg-white/[0.06] px-1.5 py-0.5 font-mono text-[12.5px] text-fg">{host}</code> to StatusReport by configuring the following CNAME records.
+              Please point <code className="rounded bg-fg/[0.06] px-1.5 py-0.5 font-mono text-[12.5px] text-fg">{host}</code> to StatusReport by configuring the following CNAME records.
             </p>
             <div className="overflow-x-auto border-t border-line sr-scroll">
               <table className="w-full text-sm">

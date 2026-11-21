@@ -141,7 +141,7 @@ export default async function MonitorDetail({ params }: { params: Promise<{ id: 
                         <span className="text-muted">{w.label}</span>
                         <span className="font-mono tabular-nums">{w.v} ms</span>
                       </div>
-                      <div className="relative h-2 rounded bg-white/5">
+                      <div className="relative h-2 rounded bg-fg/5">
                         <div className="absolute h-2 rounded" style={{ left: `${(offset / total) * 100}%`, width: `${Math.max((w.v / total) * 100, 1)}%`, background: w.color }} />
                       </div>
                     </div>

@@ -33,6 +33,7 @@ export function DiscordTemplateEditor({
   visibility,
   initial,
   appUrl,
+  sample,
   save,
   sendTest,
 }: {
@@ -40,6 +41,8 @@ export function DiscordTemplateEditor({
   visibility: DiscordVisibility;
   initial: Partial<DiscordTemplate> | null;
   appUrl: string;
+  /** The workspace's real name, ID prefix and next incident number, so previews show real-looking IDs. */
+  sample: { company: string; prefix: string; number: number };
   save: (id: string, t: DiscordTemplate) => Promise<{ ok: boolean; error?: string }>;
   sendTest: (id: string, kind: NotifyKind, t: DiscordTemplate) => Promise<{ ok: boolean; error?: string }>;
 }) {
@@ -48,7 +51,7 @@ export function DiscordTemplateEditor({
   const [raw, setRaw] = useState(Boolean(t.rawJson));
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
   const [pending, start] = useTransition();
-  const payload = useMemo(() => buildDiscordPayload(t, visibility, kind, sampleContext(kind, appUrl)), [t, visibility, kind, appUrl]);
+  const payload = useMemo(() => buildDiscordPayload(t, visibility, kind, sampleContext(kind, appUrl, sample)), [t, visibility, kind, appUrl, sample]);
   const set = <K extends keyof DiscordTemplate>(k: K, v: DiscordTemplate[K]) => setT((prev) => ({ ...prev, [k]: v }));
   const titleKey = (kind === "test" ? "down" : kind) as keyof DiscordTemplate["titles"];
 
@@ -122,7 +125,7 @@ export function DiscordTemplateEditor({
           <CardHeader
             title="Raw JSON template"
             description="Full control: replaces the generated payload. All {{variables}} are rendered."
-            actions={<Checkbox checked={raw} onChange={(e) => { setRaw(e.target.checked); if (!e.target.checked) set("rawJson", ""); else if (!t.rawJson) set("rawJson", JSON.stringify(buildDiscordPayload({ ...t, rawJson: "" }, visibility, "down", { ...sampleContext("down", appUrl) }), null, 2)); }} label="Enable" />}
+            actions={<Checkbox checked={raw} onChange={(e) => { setRaw(e.target.checked); if (!e.target.checked) set("rawJson", ""); else if (!t.rawJson) set("rawJson", JSON.stringify(buildDiscordPayload({ ...t, rawJson: "" }, visibility, "down", { ...sampleContext("down", appUrl, sample) }), null, 2)); }} label="Enable" />}
           />
           {raw && (
             <div className="p-5">

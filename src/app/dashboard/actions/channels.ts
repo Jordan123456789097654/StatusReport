@@ -97,7 +97,7 @@ export async function sendTestNotification(channelId: string, kind: NotifyKind =
   const ch = await db.alertChannel.findFirst({ where: { id: channelId, workspaceId: ctx.workspace.id } });
   if (!ch) return { ok: false, error: "Channel not found" };
   const effective = template && ch.type === "discord" ? { ...ch, template: JSON.stringify(template) } : ch;
-  const c = sampleContext(kind, env.appUrl);
+  const c = sampleContext(kind, env.appUrl, { company: ctx.workspace.name, prefix: ctx.workspace.incidentPrefix, number: ctx.workspace.incidentCounter + 1 });
   c.workspace.name = ctx.workspace.name;
   const res = await sendToChannel(effective, kind, c);
   await db.notificationLog.create({ data: { workspaceId: ctx.workspace.id, channelId: ch.id, kind: `test:${kind}`, ok: res.ok, error: res.error } });

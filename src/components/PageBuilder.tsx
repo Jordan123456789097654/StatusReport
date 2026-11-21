@@ -115,7 +115,7 @@ export function PageBuilder({
       <div className="space-y-4">
         <div className="flex flex-wrap gap-1 rounded-lg border border-line bg-card p-1 text-sm">
           {(["layout", "theme", "tokens", "bars", "code"] as Tab[]).map((t) => (
-            <button key={t} onClick={() => setTab(t)} className={cx("flex-1 cursor-pointer rounded-md px-2 py-1.5 capitalize", tab === t ? "bg-white/10 text-fg" : "text-muted hover:text-fg")}>
+            <button key={t} onClick={() => setTab(t)} className={cx("flex-1 cursor-pointer rounded-md px-2 py-1.5 capitalize", tab === t ? "bg-fg/10 text-fg" : "text-muted hover:text-fg")}>
               {t === "tokens" ? "Design" : t === "bars" ? "Uptime bars" : t}
             </button>
           ))}
@@ -176,7 +176,7 @@ export function PageBuilder({
                 <button
                   key={key}
                   onClick={() => setS((p) => ({ ...p, theme: key, tokens: {} }))}
-                  className={cx("flex cursor-pointer items-center gap-3 rounded-lg border p-2.5 text-left", s.theme === key ? "border-up/60 bg-up/5" : "border-line-strong hover:border-white/25")}
+                  className={cx("flex cursor-pointer items-center gap-3 rounded-lg border p-2.5 text-left", s.theme === key ? "border-up/60 bg-up/5" : "border-line-strong hover:border-fg/25")}
                 >
                   <span className="flex h-10 w-14 shrink-0 flex-col justify-center gap-1 rounded-md border px-1.5" style={{ background: th.tokens.bg, borderColor: th.tokens.border, borderRadius: Math.min(th.tokens.radius, 10) }}>
                     <span className="h-1.5 rounded-full" style={{ background: th.tokens.up }} />
@@ -306,16 +306,16 @@ export function PageBuilder({
         <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-1 rounded-lg border border-line bg-card p-1 text-xs">
             {(["live", "operational", "degraded", "partial", "major", "maintenance"] as const).map((v) => (
-              <button key={v} onClick={() => setSim(v)} className={cx("cursor-pointer rounded-md px-2 py-1 capitalize", sim === v ? "bg-white/10 text-fg" : "text-muted")}>
+              <button key={v} onClick={() => setSim(v)} className={cx("cursor-pointer rounded-md px-2 py-1 capitalize", sim === v ? "bg-fg/10 text-fg" : "text-muted")}>
                 {v === "live" ? "Live data" : v === "major" ? "Simulate outage" : v}
               </button>
             ))}
           </div>
           <div className="flex gap-1">
-            <button onClick={() => setDevice("desktop")} className={cx("cursor-pointer rounded-md p-1.5", device === "desktop" ? "bg-white/10" : "text-muted")} title="Desktop">
+            <button onClick={() => setDevice("desktop")} className={cx("cursor-pointer rounded-md p-1.5", device === "desktop" ? "bg-fg/10" : "text-muted")} title="Desktop">
               <Monitor size={15} />
             </button>
-            <button onClick={() => setDevice("mobile")} className={cx("cursor-pointer rounded-md p-1.5", device === "mobile" ? "bg-white/10" : "text-muted")} title="Mobile">
+            <button onClick={() => setDevice("mobile")} className={cx("cursor-pointer rounded-md p-1.5", device === "mobile" ? "bg-fg/10" : "text-muted")} title="Mobile">
               <Smartphone size={15} />
             </button>
           </div>

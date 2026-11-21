@@ -28,7 +28,7 @@ export async function createStatusPage(fd: FormData) {
   const name = str(fd, "name") || `${ctx.workspace.name} Status`;
   const wanted = (str(fd, "slug") || name).toLowerCase().replace(/[^a-z0-9-]+/g, "-").replace(/^-+|-+$/g, "");
   const slug = await uniqueSlug(RESERVED_SLUGS.includes(wanted) ? `${wanted}-status` : wanted, async (s) => Boolean(await db.statusPage.findUnique({ where: { slug: s } })));
-  const page = await db.statusPage.create({ data: { workspaceId: ctx.workspace.id, name, slug } });
+  const page = await db.statusPage.create({ data: { workspaceId: ctx.workspace.id, name, slug, theme: "clean-light" } });
   const monitors = await db.monitor.findMany({ where: { workspaceId: ctx.workspace.id }, orderBy: { createdAt: "asc" }, take: 25 });
   if (monitors.length) {
     await db.statusPageComponent.createMany({ data: monitors.map((m, i) => ({ statusPageId: page.id, monitorId: m.id, order: i })) });

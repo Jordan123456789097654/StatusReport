@@ -107,6 +107,7 @@ export default async function EditIntegration({ params, searchParams }: { params
             visibility={visibility}
             initial={json<Partial<DiscordTemplate> | null>(ch.template, null)}
             appUrl={env.appUrl}
+            sample={{ company: ctx.workspace.name, prefix: ctx.workspace.incidentPrefix, number: ctx.workspace.incidentCounter + 1 }}
             save={saveDiscordTemplate}
             sendTest={sendTestNotification}
           />

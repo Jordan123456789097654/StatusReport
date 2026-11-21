@@ -6,6 +6,7 @@ import { db } from "./db";
 import { env } from "./env";
 import { randomToken, sha256 } from "./crypto";
 import { clientIp } from "./ratelimit";
+import { prefixFromName } from "./notify/context";
 
 const COOKIE = "sr_session";
 const MAX_AGE = 30 * 86_400;
@@ -96,7 +97,7 @@ export async function uniqueSlug(base: string, exists: (slug: string) => Promise
 
 export async function createWorkspaceFor(userId: string, name: string) {
   const slug = await uniqueSlug(name, async (s) => Boolean(await db.workspace.findUnique({ where: { slug: s } })));
-  const prefix = name.replace(/[^a-zA-Z]/g, "").slice(0, 5).toUpperCase() || "SR";
+  const prefix = prefixFromName(name);
   return db.workspace.create({
     data: { name, slug, incidentPrefix: prefix, memberships: { create: { userId, role: "owner" } } },
   });

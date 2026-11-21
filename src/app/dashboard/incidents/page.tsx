@@ -85,7 +85,7 @@ export default async function IncidentsPage({ searchParams }: { searchParams: Pr
         <Card>
           <Table head={["Incident", "Status", "Severity", "Affected", "Started", "Duration"]}>
             {incidents.map((i) => (
-              <tr key={i.id} className="hover:bg-white/[0.02]">
+              <tr key={i.id} className="hover:bg-fg/[0.02]">
                 <td className="px-5 py-3">
                   <Link href={`/dashboard/incidents/${i.id}`} className="font-medium hover:underline">
                     <span className="mr-1.5 font-mono text-xs text-dim">#{incidentLabel(ctx.workspace.incidentPrefix, i.number)}</span>

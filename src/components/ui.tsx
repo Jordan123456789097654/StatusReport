@@ -1,4 +1,4 @@
-// Server-safe UI primitives (no hooks) in the Better Stack dark style.
+// Server-safe UI primitives (no hooks). Colors come from CSS tokens, so light and dark both work.
 import Link from "next/link";
 import type { ComponentProps, ReactNode } from "react";
 
@@ -8,12 +8,12 @@ export function cx(...c: (string | false | null | undefined)[]) {
 
 type Variant = "primary" | "secondary" | "danger" | "ghost";
 const VARIANTS: Record<Variant, string> = {
-  primary: "bg-up text-[#06140b] hover:bg-[#2dd46a] font-semibold",
-  secondary: "bg-card-2 text-fg border border-line-strong hover:bg-card-3",
+  primary: "bg-fg text-bg font-medium shadow-sm hover:opacity-85",
+  secondary: "bg-card text-fg border border-line-strong shadow-sm hover:bg-card-2",
   danger: "bg-down/10 text-down border border-down/30 hover:bg-down/20",
-  ghost: "text-muted hover:text-fg hover:bg-white/5",
+  ghost: "text-muted hover:text-fg hover:bg-fg/5",
 };
-const btn = "inline-flex items-center justify-center gap-2 rounded-lg px-3.5 py-2 text-sm transition-colors disabled:opacity-50 cursor-pointer whitespace-nowrap";
+const btn = "inline-flex items-center justify-center gap-2 rounded-lg px-3.5 py-2 text-sm transition-[background-color,opacity,transform,box-shadow] duration-150 active:scale-[0.98] disabled:opacity-50 disabled:active:scale-100 cursor-pointer whitespace-nowrap";
 
 export function Button({ variant = "secondary", className, ...p }: ComponentProps<"button"> & { variant?: Variant }) {
   return <button className={cx(btn, VARIANTS[variant], className)} {...p} />;
@@ -24,7 +24,7 @@ export function LinkButton({ variant = "secondary", className, ...p }: Component
 }
 
 export function Card({ className, ...p }: ComponentProps<"div">) {
-  return <div className={cx("rounded-xl border border-line bg-card", className)} {...p} />;
+  return <div className={cx("rounded-xl border border-line bg-card shadow-card", className)} {...p} />;
 }
 
 export function CardHeader({ title, description, actions }: { title: ReactNode; description?: ReactNode; actions?: ReactNode }) {
@@ -91,7 +91,7 @@ export function Select({ className, ...p }: ComponentProps<"select">) {
 export function Checkbox({ label, hint, ...p }: ComponentProps<"input"> & { label: ReactNode; hint?: ReactNode }) {
   return (
     <label className="flex cursor-pointer items-start gap-2.5 text-sm">
-      <input type="checkbox" className="mt-0.5 h-4 w-4 accent-[#22C55E]" {...p} />
+      <input type="checkbox" className="mt-0.5 h-4 w-4 accent-[var(--fg)]" {...p} />
       <span>
         {label}
         {hint && <span className="block text-xs text-dim">{hint}</span>}
@@ -134,7 +134,7 @@ const PILL: Record<string, string> = {
 
 export function Pill({ status, children, className }: { status: string; children?: ReactNode; className?: string }) {
   return (
-    <span className={cx("inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-medium capitalize", PILL[status] || "border-line-strong bg-white/5 text-muted", className)}>
+    <span className={cx("inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-medium capitalize", PILL[status] || "border-line-strong bg-fg/5 text-muted", className)}>
       {children ?? status.replace("_", " ")}
     </span>
   );
@@ -168,7 +168,7 @@ export function Tabs({ tabs, active }: { tabs: { href: string; label: string; ke
         <Link
           key={t.key}
           href={t.href}
-          className={cx("-mb-px whitespace-nowrap border-b-2 px-3 py-2 text-sm", t.key === active ? "border-up text-fg" : "border-transparent text-muted hover:text-fg")}
+          className={cx("-mb-px whitespace-nowrap border-b-2 px-3 py-2 text-sm", t.key === active ? "border-fg text-fg" : "border-transparent text-muted hover:text-fg")}
         >
           {t.label}
         </Link>
@@ -206,15 +206,23 @@ export function Table({ head, children }: { head: ReactNode[]; children: ReactNo
 }
 
 export function Code({ children }: { children: ReactNode }) {
-  return <code className="rounded bg-white/[0.06] px-1.5 py-0.5 font-mono text-[12.5px] text-fg/90">{children}</code>;
+  return <code className="rounded bg-fg/[0.06] px-1.5 py-0.5 font-mono text-[12.5px] text-fg/90">{children}</code>;
 }
 
-export function Logo({ className }: { className?: string }) {
+export function LogoMark({ size = 28, className }: { size?: number; className?: string }) {
   return (
-    <span className={cx("inline-flex items-center gap-2 font-semibold tracking-tight", className)}>
-      <span className="relative inline-flex h-6 w-6 items-center justify-center rounded-md bg-up/15">
-        <span className="h-2 w-2 rounded-full bg-up text-up sr-pulse" />
-      </span>
+    <svg width={size} height={size} viewBox="0 0 32 32" className={className} aria-hidden="true">
+      <rect width="32" height="32" rx="9" fill="var(--fg)" />
+      <path d="M6 17h5l3-7 4 12 3-5h5" fill="none" stroke="var(--bg)" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+      <circle cx="26" cy="8" r="2.6" fill="#22c55e" />
+    </svg>
+  );
+}
+
+export function Logo({ className, size = 28 }: { className?: string; size?: number }) {
+  return (
+    <span className={cx("inline-flex items-center gap-2.5 font-semibold tracking-tight", className)}>
+      <LogoMark size={size} />
       StatusReport
     </span>
   );

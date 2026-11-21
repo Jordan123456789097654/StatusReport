@@ -12,7 +12,7 @@ import { sampleConfig } from "@/lib/sample";
 import { THEMES } from "@/lib/themes";
 
 export function Sandbox({ data, appUrl }: { data: ViewData; appUrl: string }) {
-  const [theme, setTheme] = useState("betterstack-dark");
+  const [theme, setTheme] = useState("clean-light");
   const [outage, setOutage] = useState(false);
   const config: PageConfig = useMemo(() => sampleConfig(theme), [theme]);
   const view: ViewData = useMemo(() => {

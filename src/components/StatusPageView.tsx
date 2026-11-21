@@ -9,6 +9,7 @@ import { LOCALES } from "@/lib/i18n";
 import type { ComponentStatus, ComponentView, IncidentView, PageConfig, ViewData } from "@/lib/statuspage";
 import { tokensToStyle } from "@/lib/themes";
 import { LatencyChart, UptimeBars } from "./charts";
+import { Reveal } from "./motion";
 
 const COLOR: Record<ComponentStatus, string> = {
   operational: "var(--sr-up)",
@@ -229,8 +230,10 @@ export function StatusPageView({
     <div className="sr-page min-h-full" style={{ ...(tokensToStyle(config.tokens) as CSSProperties), background: "var(--sr-bg)", color: "var(--sr-text)", fontFamily: "var(--sr-font)" }}>
       {allowCustomHtml && config.customHeader && <CustomHtml html={config.customHeader} />}
       <main className="mx-auto max-w-3xl space-y-8 px-4 py-10">
-        {config.blocks.filter((b) => b.enabled).map((b) => (
-          <div key={b.id}>{renderBlock(b)}</div>
+        {config.blocks.filter((b) => b.enabled).map((b, i) => (
+          <Reveal key={b.id} delay={i * 0.06}>
+            {renderBlock(b)}
+          </Reveal>
         ))}
         <footer className="flex flex-wrap items-center justify-between gap-3 pt-4 text-xs" style={{ color: "var(--sr-muted)" }}>
           <span>
@@ -289,7 +292,7 @@ function SectionBlock({ section, config, componentText }: { section: ViewData["s
         </button>
       )}
       {open && (
-        <div className="divide-y" style={{ borderColor: "var(--sr-border)" }}>
+        <div>
           {section.components.map((c) => (
             <ComponentRow key={c.id} c={c} config={config} label={componentText[c.status]} first={!section.name} />
           ))}

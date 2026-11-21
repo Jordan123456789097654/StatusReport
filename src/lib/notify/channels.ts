@@ -136,12 +136,13 @@ export async function sendEmail(to: string[], subject: string, html: string, tex
 }
 
 export function emailFor(s: Summary, footerHtml = ""): { subject: string; html: string; text: string } {
-  const html = `<!doctype html><html><body style="margin:0;background:#0B0D12;font-family:Inter,Arial,sans-serif;color:#E6E8EE">
+  const html = `<!doctype html><html><body style="margin:0;background:#fafaf9;font-family:Inter,Arial,sans-serif;color:#0a0a0a">
 <div style="max-width:560px;margin:0 auto;padding:32px 20px">
-<div style="background:#13161F;border:1px solid rgba(255,255,255,.08);border-left:4px solid ${s.color};border-radius:10px;padding:20px">
+<div style="font-weight:600;font-size:15px;margin:0 0 16px;letter-spacing:-.01em">&#9679; StatusReport</div>
+<div style="background:#ffffff;border:1px solid #e7e7e3;border-left:4px solid ${s.color};border-radius:12px;padding:22px;box-shadow:0 1px 2px rgba(10,10,10,.04)">
 <h2 style="margin:0 0 12px;font-size:17px">${escapeHtml(s.title)}</h2>
-${s.lines.map((l) => `<p style="margin:6px 0;color:#A1A6B4;font-size:14px">${escapeHtml(l)}</p>`).join("")}
-${s.url ? `<p style="margin:18px 0 0"><a href="${escapeHtml(s.url)}" style="background:#22C55E;color:#0B0D12;padding:9px 14px;border-radius:7px;text-decoration:none;font-weight:600;font-size:14px">View incident</a></p>` : ""}
+${s.lines.map((l) => `<p style="margin:6px 0;color:#5f5f5a;font-size:14px;line-height:1.55">${escapeHtml(l)}</p>`).join("")}
+${s.url ? `<p style="margin:18px 0 0"><a href="${escapeHtml(s.url)}" style="background:#0a0a0a;color:#fafafa;padding:10px 16px;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px">View incident</a></p>` : ""}
 </div>${footerHtml}</div></body></html>`;
   return { subject: s.title, html, text: `${s.title}\n\n${s.lines.join("\n")}\n\n${s.url}` };
 }

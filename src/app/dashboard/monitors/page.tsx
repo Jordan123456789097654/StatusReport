@@ -41,7 +41,7 @@ export default async function MonitorsPage() {
         <Card>
           <Table head={["", "Monitor", "Uptime (30d)", "Interval", "Last check", "State"]}>
             {monitors.map((m) => (
-              <tr key={m.id} className="hover:bg-white/[0.02]">
+              <tr key={m.id} className="hover:bg-fg/[0.02]">
                 <td className="w-8 py-3.5 pl-5">
                   <StatusDot status={m.paused ? "paused" : m.inMaintenance ? "maintenance" : m.status} />
                 </td>

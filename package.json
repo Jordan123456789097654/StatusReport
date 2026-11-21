@@ -16,12 +16,17 @@
     "typecheck": "tsc --noEmit",
     "postinstall": "node scripts/prepare-db.mjs && prisma generate",
     "serve": "node scripts/serve.mjs",
-    "db:seed-status": "node --env-file-if-exists=.env --import tsx scripts/seed-status.ts"
+    "db:seed-status": "node --env-file-if-exists=.env --import tsx scripts/seed-status.ts",
+    "db:seed-demo": "node --env-file-if-exists=.env --import tsx scripts/seed-demo.ts",
+    "screenshots": "node scripts/capture-screenshots.mjs"
   },
   "dependencies": {
     "@prisma/client": "6.19.3",
+    "cmdk": "^1.1.1",
     "lucide-react": "0.577.0",
+    "motion": "^14.14.0",
     "next": "15.5.29",
+    "next-themes": "^0.4.6",
     "nodemailer": "7.0.13",
     "react": "19.2.9",
     "react-dom": "19.2.9",
@@ -35,6 +40,7 @@
     "@types/react": "19.2.18",
     "@types/react-dom": "19.2.7",
     "prisma": "6.19.3",
+    "puppeteer-core": "^25.18.1",
     "tailwindcss": "4.3.5",
     "typescript": "5.9.3"
   }

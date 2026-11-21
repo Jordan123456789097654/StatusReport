@@ -36,6 +36,14 @@ const betterstack: Tokens = {
 };
 
 export const THEMES: Record<string, { label: string; tokens: Tokens }> = {
+  "clean-light": {
+    label: "Clean Light",
+    tokens: { ...betterstack, bg: "#FAFAF9", surface: "#FFFFFF", border: "rgba(10,10,10,0.08)", text: "#0A0A0A", muted: "#5F5F5A", accent: "#0A0A0A", up: "#16A34A", degraded: "#D97706", down: "#DC2626", maintenance: "#2563EB", nodata: "#E7E7E3", radius: 14, shadow: "sm" },
+  },
+  "clean-dark": {
+    label: "Clean Dark",
+    tokens: { ...betterstack, bg: "#09090B", surface: "#111113", border: "rgba(255,255,255,0.08)", text: "#FAFAFA", muted: "#A1A1AA", accent: "#FAFAFA", nodata: "#27272A", radius: 14, shadow: "sm" },
+  },
   "betterstack-dark": { label: "Better Stack Dark", tokens: betterstack },
   "minimal-light": {
     label: "Minimalist Light",
@@ -64,7 +72,7 @@ export function resolveTokens(theme: string, overrides: Partial<Tokens> | null |
   return { ...base, ...clean };
 }
 
-const SHADOWS = { none: "none", sm: "0 1px 2px rgba(0,0,0,.25), 0 8px 24px -12px rgba(0,0,0,.35)", lg: "0 2px 4px rgba(0,0,0,.3), 0 24px 60px -20px rgba(0,0,0,.6)" };
+const SHADOWS = { none: "none", sm: "0 1px 2px rgba(0,0,0,.06), 0 10px 28px -14px rgba(0,0,0,.22)", lg: "0 2px 4px rgba(0,0,0,.3), 0 24px 60px -20px rgba(0,0,0,.6)" };
 
 /** Strip anything that could break out of a CSS declaration. */
 const safe = (v: string) => String(v).replace(/[;{}<>\\]/g, "");

@@ -13,7 +13,7 @@ export function PostmortemEditor({ id, initial, published, action }: { id: strin
       <div className="flex items-center justify-between">
         <div className="flex gap-1 rounded-lg border border-line-strong p-0.5 text-sm">
           {(["write", "preview"] as const).map((t) => (
-            <button key={t} type="button" onClick={() => setTab(t)} className={`cursor-pointer rounded-md px-3 py-1 capitalize ${tab === t ? "bg-white/10" : "text-muted"}`}>
+            <button key={t} type="button" onClick={() => setTab(t)} className={`cursor-pointer rounded-md px-3 py-1 capitalize ${tab === t ? "bg-fg/10" : "text-muted"}`}>
               {t}
             </button>
           ))}

@@ -6,7 +6,7 @@ export function Gate({ page, mode, back, error }: { page: StatusPage; mode: "pas
   return (
     <div className="flex min-h-screen items-center justify-center bg-bg px-4">
       <div className="w-full max-w-sm rounded-xl border border-line bg-card p-7 text-center">
-        <div className="mx-auto mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-white/5">
+        <div className="mx-auto mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-fg/5">
           {mode === "password" ? <Lock size={18} /> : <ShieldOff size={18} />}
         </div>
         <h1 className="text-lg font-semibold">{page.name}</h1>

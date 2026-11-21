@@ -35,8 +35,8 @@ export function UptimeBars({
           <div
             key={b.day}
             onMouseEnter={() => setHover(i)}
-            className="h-full min-w-0 flex-1 cursor-pointer transition-opacity"
-            style={{ background: BAR_COLOR[b.status], borderRadius: config.radius, opacity: hover === null || hover === i ? 1 : 0.55 }}
+            className="sr-bar h-full min-w-0 flex-1 cursor-pointer transition-opacity"
+            style={{ background: BAR_COLOR[b.status], borderRadius: config.radius, opacity: hover === null || hover === i ? 1 : 0.55, animationDelay: `${Math.min(i * 5, 450)}ms` }}
           />
         ))}
       </div>

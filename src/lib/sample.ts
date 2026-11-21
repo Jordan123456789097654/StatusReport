@@ -63,7 +63,7 @@ export function sampleViewData(): ViewData {
   };
 }
 
-export function sampleConfig(theme = "betterstack-dark"): PageConfig {
+export function sampleConfig(theme = "clean-light"): PageConfig {
   return {
     name: "Acme Status",
     description: "Live status for Acme's products and services.",
